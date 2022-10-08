@@ -13,7 +13,6 @@
 
 package com.badlogic.gdx.tiledmappacker;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -33,7 +32,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.PixmapPackerIndexed;
+import com.badlogic.gdx.graphics.g2d.PixmapPacker;
 import com.badlogic.gdx.graphics.g2d.PixmapPackerIO;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -45,8 +44,8 @@ import org.xml.sax.SAXException;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.loaders.resolvers.AbsoluteFileHandleResolver;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapLayer;
@@ -75,7 +74,7 @@ import com.badlogic.gdx.utils.ObjectMap;
  * @author David Fraska and others (initial implementation, tell me who you are!)
  * @author Manuel Bua */
 public class TiledMapPacker {
-	private PixmapPackerIndexed packer;
+	private PixmapPacker packer;
 	private TiledMap map;
 
 	private TmxMapLoader mapLoader = new TmxMapLoader(new AbsoluteFileHandleResolver());
@@ -89,7 +88,6 @@ public class TiledMapPacker {
 
 	static File inputDir;
 	static File outputDir;
-	private FileHandle currentDir;
 
 	private static class TmxFilter implements FilenameFilter {
 		public TmxFilter () {
@@ -295,14 +293,14 @@ public class TiledMapPacker {
 		return bucket;
 	}
 
-	/** Traverse the specified tilesets, optionally lookup the used ids and pass every tile image to the {@link PixmapPackerIndexed},
+	/** Traverse the specified tilesets, optionally lookup the used ids and pass every tile image to the {@link PixmapPacker},
 	 * optionally ignoring unused tile ids */
 	private void packTilesets (FileHandle inputDirHandle, Settings s) throws IOException {
 		Pixmap tile;
 		Vector2 tileLocation;
 
-		packer = new PixmapPackerIndexed(s.maxWidth, s.maxHeight, Pixmap.Format.RGBA8888, Math.max(s.paddingX, s.paddingY),
-				s.duplicatePadding, s.stripWhitespaceX, s.stripWhitespaceY, new PixmapPackerIndexed.SkylineStrategy());
+		packer = new PixmapPacker(s.maxWidth, s.maxHeight, Pixmap.Format.RGBA8888, Math.max(s.paddingX, s.paddingY),
+				s.duplicatePadding, s.stripWhitespaceX, s.stripWhitespaceY, new PixmapPacker.SkylineStrategy());
 
 		for (TiledMapTileSet set : tilesetsToPack.values()) {
 			String tilesetName = set.getName();
@@ -483,12 +481,10 @@ public class TiledMapPacker {
 			processExtraArgs(args, packerSettings);
 		}
 
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.forceExit = false;
-		config.width = 100;
-		config.height = 50;
-		config.title = "TiledMapPacker";
-		new LwjglApplication(new ApplicationListener() {
+		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+		config.setWindowedMode(100, 50);
+		config.setTitle("TiledMapPacker");
+		new Lwjgl3Application(new ApplicationListener() {
 
 			@Override
 			public void resume () {
@@ -575,7 +571,7 @@ public class TiledMapPacker {
 	public static class TiledMapPackerSettings {
 		public boolean stripUnusedTiles = false;
 		public boolean combineTilesets = false;
-		public boolean verbose = true;
+		public boolean verbose = false;
 		public String tilesetOutputDirectory = TilesetsOutputDir;
 		public String atlasOutputName = AtlasOutputName;
 	}
@@ -614,7 +610,6 @@ public class TiledMapPacker {
 		public boolean grid;
 		public float[] scale = {1};
 		public String[] scaleSuffix = {""};
-		public Resampling[] scaleResampling = {Resampling.bicubic};
 		public String atlasExtension = ".atlas";
 		public boolean prettyPrint = false;
 		public boolean legacyOutput = false;
@@ -667,7 +662,6 @@ public class TiledMapPacker {
 			grid = settings.grid;
 			scale = Arrays.copyOf(settings.scale, settings.scale.length);
 			scaleSuffix = Arrays.copyOf(settings.scaleSuffix, settings.scaleSuffix.length);
-			scaleResampling = Arrays.copyOf(settings.scaleResampling, settings.scaleResampling.length);
 			atlasExtension = settings.atlasExtension;
 			prettyPrint = settings.prettyPrint;
 			legacyOutput = settings.legacyOutput;
@@ -686,17 +680,6 @@ public class TiledMapPacker {
 				}
 			}
 			return packFileName;
-		}
-	}
-	public enum Resampling {
-		nearest(RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR), //
-		bilinear(RenderingHints.VALUE_INTERPOLATION_BILINEAR), //
-		bicubic(RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-
-		final Object value;
-
-		Resampling (Object value) {
-			this.value = value;
 		}
 	}
 }

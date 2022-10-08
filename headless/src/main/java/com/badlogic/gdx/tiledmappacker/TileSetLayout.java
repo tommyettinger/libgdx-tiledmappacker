@@ -16,17 +16,13 @@
 
 package com.badlogic.gdx.tiledmappacker;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.IntMap;
+
+import java.io.IOException;
 
 /** Contains extra information that can only be calculated after a Tiled Map's tile set images are loaded.
  * @author David Fraska */

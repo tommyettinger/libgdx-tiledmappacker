@@ -7,8 +7,7 @@ sourceSets.main.resources.srcDirs = [file('../assets').path]
 
 dependencies {
 	implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
-	implementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
-	implementation "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+	implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
 	implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 }
 
