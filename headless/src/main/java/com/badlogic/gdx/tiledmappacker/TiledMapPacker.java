@@ -14,7 +14,6 @@
 package com.badlogic.gdx.tiledmappacker;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -34,7 +33,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.PixmapPacker;
+import com.badlogic.gdx.graphics.g2d.PixmapPackerIndexed;
 import com.badlogic.gdx.graphics.g2d.PixmapPackerIO;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -76,7 +75,7 @@ import com.badlogic.gdx.utils.ObjectMap;
  * @author David Fraska and others (initial implementation, tell me who you are!)
  * @author Manuel Bua */
 public class TiledMapPacker {
-	private PixmapPacker packer;
+	private PixmapPackerIndexed packer;
 	private TiledMap map;
 
 	private TmxMapLoader mapLoader = new TmxMapLoader(new AbsoluteFileHandleResolver());
@@ -296,14 +295,14 @@ public class TiledMapPacker {
 		return bucket;
 	}
 
-	/** Traverse the specified tilesets, optionally lookup the used ids and pass every tile image to the {@link PixmapPacker},
+	/** Traverse the specified tilesets, optionally lookup the used ids and pass every tile image to the {@link PixmapPackerIndexed},
 	 * optionally ignoring unused tile ids */
 	private void packTilesets (FileHandle inputDirHandle, Settings s) throws IOException {
 		Pixmap tile;
 		Vector2 tileLocation;
 
-		packer = new PixmapPacker(s.maxWidth, s.maxHeight, Pixmap.Format.RGBA8888, Math.max(s.paddingX, s.paddingY),
-				s.duplicatePadding, s.stripWhitespaceX, s.stripWhitespaceY, new PixmapPacker.GuillotineStrategy());
+		packer = new PixmapPackerIndexed(s.maxWidth, s.maxHeight, Pixmap.Format.RGBA8888, Math.max(s.paddingX, s.paddingY),
+				s.duplicatePadding, s.stripWhitespaceX, s.stripWhitespaceY, new PixmapPackerIndexed.SkylineStrategy());
 
 		for (TiledMapTileSet set : tilesetsToPack.values()) {
 			String tilesetName = set.getName();
@@ -353,7 +352,9 @@ public class TiledMapPacker {
 		File outputDirTilesets = new File(relativeTilesetOutputDir.getCanonicalPath());
 
 		outputDirTilesets.mkdirs();
-		new PixmapPackerIO().save(Gdx.files.absolute(tilesetOutputDir).child(this.settings.atlasOutputName + ".atlas"), packer);
+		PixmapPackerIO.SaveParameters sp = new PixmapPackerIO.SaveParameters();
+		sp.useIndexes = true;
+		new PixmapPackerIO().save(Gdx.files.absolute(tilesetOutputDir).child(this.settings.atlasOutputName + ".atlas"), packer, sp);
 	}
 
 	private void writeUpdatedTMX (TiledMap tiledMap, FileHandle tmxFileHandle) throws IOException {
