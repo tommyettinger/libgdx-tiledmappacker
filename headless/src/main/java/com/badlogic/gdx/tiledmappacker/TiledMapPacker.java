@@ -330,20 +330,22 @@ public class TiledMapPacker {
 
 				tileLocation = layout.getLocation(gid);
 				tile = new Pixmap(tileWidth, tileHeight, Pixmap.Format.RGBA8888);
-				tile.drawPixmap(layout.image, 0, 0, tileWidth, tileHeight, (int)tileLocation.x, (int)tileLocation.y,
-						(int)tileLocation.x + tileWidth, (int)tileLocation.y + tileHeight);
+				tile.drawPixmap(layout.image, (int)tileLocation.x, (int)tileLocation.y,
+						tileWidth, tileHeight, 0, 0, tileWidth, tileHeight);
 
-				if (verbose) {
-					System.out.println(
-						"Adding " + tileWidth + "x" + tileHeight + " (" + (int)tileLocation.x + ", " + (int)tileLocation.y + ")");
-				}
 				// AtlasTmxMapLoader expects every tileset's index to begin at zero for the first tile in every tileset.
 				// so the region's adjusted gid is (gid - layout.firstgid). firstgid will be added back in AtlasTmxMapLoader on load
 				int adjustedGid = gid - layout.firstgid;
 				final String separator = "_";
 				String regionName = tilesetName + separator + adjustedGid;
 
+				if (verbose) {
+					System.out.println(
+							"Adding " + regionName + " " + tileWidth + "x" + tileHeight + " (" + (int)tileLocation.x + ", " + (int)tileLocation.y + ")");
+				}
+
 				packer.pack(regionName, tile);
+				tile.dispose();
 			}
 		}
 		String tilesetOutputDir = outputDir.toString() + "/" + this.settings.tilesetOutputDirectory;
@@ -480,7 +482,6 @@ public class TiledMapPacker {
 			processExtraArgs(args, packerSettings);
 		}
 
-		TiledMapPacker packer = new TiledMapPacker(packerSettings);
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.forceExit = false;
 		config.width = 100;
@@ -573,7 +574,7 @@ public class TiledMapPacker {
 	public static class TiledMapPackerSettings {
 		public boolean stripUnusedTiles = false;
 		public boolean combineTilesets = false;
-		public boolean verbose = false;
+		public boolean verbose = true;
 		public String tilesetOutputDirectory = TilesetsOutputDir;
 		public String atlasOutputName = AtlasOutputName;
 	}
@@ -614,8 +615,8 @@ public class TiledMapPacker {
 		public String[] scaleSuffix = {""};
 		public Resampling[] scaleResampling = {Resampling.bicubic};
 		public String atlasExtension = ".atlas";
-		public boolean prettyPrint = true;
-		public boolean legacyOutput = true;
+		public boolean prettyPrint = false;
+		public boolean legacyOutput = false;
 
 		public Settings () {
 		}

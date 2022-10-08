@@ -21,6 +21,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -40,7 +41,7 @@ public class TiledMapPackerTestRender extends ApplicationAdapter {
 	// MAP_PATH = "../../tests/gdx-tests-android/assets/data/maps/tiled-atlas-processed/deleteMe/";
 
 	private final boolean DELETE_DELETEME_FOLDER_ON_EXIT = false; // read warning before setting to true
-	private final static String MAP_PATH = "../../tests/gdx-tests-android/assets/data/maps/tiled-atlas-processed/deleteMe/";
+	private final static String MAP_PATH = "headless/src/test/resources/maps//tiled-atlas-processed/deleteMe/";
 
 	private final String MAP_NAME = "test.tmx";
 	private final String TMX_LOC = MAP_PATH + MAP_NAME;
@@ -108,6 +109,11 @@ public class TiledMapPackerTestRender extends ApplicationAdapter {
 			System.out.println("Please run TiledMapPackerTest.");
 			return;
 		}
-		new LwjglApplication(new TiledMapPackerTestRender(), "", 640, 480);
+		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
+		cfg.width = 640;
+		cfg.height = 480;
+		cfg.title = "";
+		cfg.forceExit = false;
+		new LwjglApplication(new TiledMapPackerTestRender(), cfg);
 	}
 }

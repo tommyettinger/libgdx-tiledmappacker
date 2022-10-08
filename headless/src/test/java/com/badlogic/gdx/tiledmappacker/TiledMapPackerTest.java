@@ -29,7 +29,7 @@ public class TiledMapPackerTest {
 	}
 
 	public static void main (String[] args) throws Exception {
-		String path = "../../tests/gdx-tests-android/assets/data/maps/";
+		String path = "headless/src/test/resources/maps/";
 		String input = path + "tiled-atlas-src";
 		String output = path + "tiled-atlas-processed/deleteMe";
 		String verboseOpt = "-v";
