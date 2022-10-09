@@ -1,6 +1,10 @@
+plugins {
+	id "com.github.johnrengelman.shadow" version "7.1.2"
+}
 import proguard.gradle.ProGuardTask
 
 apply plugin: 'application'
+apply plugin: 'java'
 
 sourceCompatibility = 1.8
 mainClassName = 'com.badlogic.gdx.tiledmappacker.TiledMapPacker'
@@ -20,13 +24,27 @@ jar {
 	archiveFileName.set("${appName}.jar")
 	duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
 	dependsOn configurations.runtimeClasspath
-//    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     exclude('META-INF/INDEX.LIST', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA')
     dependencies {
         exclude('META-INF/INDEX.LIST', 'META-INF/maven/**')
     }
 	manifest {
 		attributes 'Main-Class': project.mainClassName
+	}
+	doLast {
+		file(archiveFile).setExecutable(true, false)
+	}
+}
+
+shadowJar {
+	duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+	archiveFileName.set("${appName}-${version}.jar")
+	manifest {
+		attributes 'Main-Class': project.mainClassName
+	}
+	minimize() {
+		exclude(project(":lwjgl3"))
 	}
 	doLast {
 		file(archiveFile).setExecutable(true, false)
@@ -44,11 +62,11 @@ task proguard(type: ProGuardTask) {
 		libraryjars "${System.getProperty('java.home')}/jmods/java.base.jmod", jarfilter: '!**.jar', filter: '!module-info.class'
 	}
 //	injars jar.archiveFile
-//	injars filter: "!Test.class", file("build/libs/${appName}.jar")
-	var allJars = configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-	allJars.add(file("build/libs/${appName}.jar"))
-	// we need to remove a Java 19-related file from LWJGL 3.3.1; ProGuard can't handle it.
-	injars filter: "!Test.class", allJars
+	injars file("build/libs/${appName}.jar")
+//	var allJars = configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+//	allJars.add(file("build/libs/${appName}.jar"))
+//	// we need to remove a Java 19-related file from LWJGL 3.3.1; ProGuard can't handle it.
+//	injars filter: "!Test.class", allJars
 	outjars "build/libs/${appName}-${version}.jar"
 }
 
