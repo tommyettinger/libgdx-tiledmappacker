@@ -2,7 +2,7 @@ apply plugin: 'application'
 
 sourceCompatibility = 1.8
 mainClassName = 'com.badlogic.gdx.tiledmappacker.TiledMapPacker'
-eclipse.project.name = appName + '-headless'
+eclipse.project.name = appName + '-lwjgl3'
 sourceSets.main.resources.srcDirs = [file('../assets').path]
 
 dependencies {
