@@ -111,7 +111,8 @@ public class TiledMapPackerTestRender extends ApplicationAdapter {
 		}
 		Lwjgl3ApplicationConfiguration cfg = new Lwjgl3ApplicationConfiguration();
 		cfg.setWindowedMode(640, 480);
-		cfg.setTitle("");
+		cfg.setTitle("Tiled Render Test");
+		cfg.disableAudio(true);
 		new Lwjgl3Application(new TiledMapPackerTestRender(), cfg);
 	}
 }

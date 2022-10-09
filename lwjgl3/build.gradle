@@ -1,3 +1,5 @@
+import proguard.gradle.ProGuardTask
+
 apply plugin: 'application'
 
 sourceCompatibility = 1.8
@@ -7,12 +9,15 @@ sourceSets.main.resources.srcDirs = [file('../assets').path]
 
 dependencies {
 	implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
-	implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+	implementation ("com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"){
+		exclude group: "org.jcraft", module: "jorbis"
+		exclude group: "org.lwjgl", module: "lwjgl-openal"
+	}
 	implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 }
 
 jar {
-	archiveBaseName.set("TiledMapPacker")
+	archiveFileName.set("${appName}.jar")
 	duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
 	dependsOn configurations.runtimeClasspath
     from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
@@ -27,3 +32,18 @@ jar {
 		file(archiveFile).setExecutable(true, false)
 	}
 }
+
+task proguard(type: ProGuardTask) {
+	outputs.upToDateWhen { false }
+	configuration 'proguard-rules.pro'
+	//printmapping 'build/lib/out.map'
+	if (System.getProperty('java.version').startsWith('1.')) {
+		libraryjars "${System.getProperty('java.home')}/lib/rt.jar"
+	} else {
+		libraryjars "${System.getProperty('java.home')}/jmods/java.base.jmod", jarfilter: '!**.jar', filter: '!module-info.class'
+	}
+	injars "build/libs/${appName}.jar"
+	outjars "build/libs/${appName}-${version}.jar"
+}
+
+proguard.dependsOn jar

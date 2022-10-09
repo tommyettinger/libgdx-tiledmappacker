@@ -484,6 +484,7 @@ public class TiledMapPacker {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setWindowedMode(100, 50);
 		config.setTitle("TiledMapPacker");
+		config.disableAudio(true);
 		new Lwjgl3Application(new ApplicationListener() {
 
 			@Override
