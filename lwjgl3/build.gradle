@@ -20,7 +20,7 @@ jar {
 	archiveFileName.set("${appName}.jar")
 	duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
 	dependsOn configurations.runtimeClasspath
-    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+//    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     exclude('META-INF/INDEX.LIST', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA')
     dependencies {
         exclude('META-INF/INDEX.LIST', 'META-INF/maven/**')
@@ -34,6 +34,7 @@ jar {
 }
 
 task proguard(type: ProGuardTask) {
+//	(configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } + file("build/libs/${appName}.jar")).each { println(it) }
 	outputs.upToDateWhen { false }
 	configuration 'proguard-rules.pro'
 	//printmapping 'build/lib/out.map'
@@ -42,7 +43,12 @@ task proguard(type: ProGuardTask) {
 	} else {
 		libraryjars "${System.getProperty('java.home')}/jmods/java.base.jmod", jarfilter: '!**.jar', filter: '!module-info.class'
 	}
-	injars "build/libs/${appName}.jar"
+//	injars jar.archiveFile
+//	injars filter: "!Test.class", file("build/libs/${appName}.jar")
+	var allJars = configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+	allJars.add(file("build/libs/${appName}.jar"))
+	// we need to remove a Java 19-related file from LWJGL 3.3.1; ProGuard can't handle it.
+	injars filter: "!Test.class", allJars
 	outjars "build/libs/${appName}-${version}.jar"
 }
 
