@@ -29,8 +29,6 @@
 -mergeinterfacesaggressively
 -repackageclasses ''
 -allowaccessmodification
--dontobfuscate
--keeppackagenames
 
 # FIELD ISSUE NPE
 -optimizations !field/propagation/value

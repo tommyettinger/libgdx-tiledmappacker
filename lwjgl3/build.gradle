@@ -1,10 +1,6 @@
-plugins {
-	id "com.github.johnrengelman.shadow" version "7.1.2"
-}
 import proguard.gradle.ProGuardTask
 
 apply plugin: 'application'
-apply plugin: 'java'
 
 sourceCompatibility = 1.8
 mainClassName = 'com.badlogic.gdx.tiledmappacker.TiledMapPacker'
@@ -31,20 +27,6 @@ jar {
     }
 	manifest {
 		attributes 'Main-Class': project.mainClassName
-	}
-	doLast {
-		file(archiveFile).setExecutable(true, false)
-	}
-}
-
-shadowJar {
-	duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
-	archiveFileName.set("${appName}-${version}.jar")
-	manifest {
-		attributes 'Main-Class': project.mainClassName
-	}
-	minimize() {
-		exclude(project(":lwjgl3"))
 	}
 	doLast {
 		file(archiveFile).setExecutable(true, false)
