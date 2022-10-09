@@ -153,7 +153,7 @@ public class TiledMapPacker {
 		processSubdirectories(inputDirHandle, texturePackerSettings);
 
 		boolean combineTilesets = this.settings.combineTilesets;
-		if (combineTilesets == true) {
+		if (combineTilesets) {
 			packTilesets(inputDirHandle, texturePackerSettings);
 		}
 	}
@@ -179,7 +179,7 @@ public class TiledMapPacker {
 
 	private void processSingleMap (File mapFile, FileHandle dirHandle, Settings texturePackerSettings) throws IOException {
 		boolean combineTilesets = this.settings.combineTilesets;
-		if (combineTilesets == false) {
+		if (!combineTilesets) {
 			tilesetUsedIds = new HashMap<String, IntArray>();
 			tilesetsToPack = new ObjectMap<String, TiledMapTileSet>();
 		}
@@ -199,7 +199,7 @@ public class TiledMapPacker {
 			}
 		}
 
-		if (combineTilesets == false) {
+		if (!combineTilesets) {
 			FileHandle tmpHandle = new FileHandle(mapFile.getName());
 			this.settings.atlasOutputName = tmpHandle.nameWithoutExtension();
 
@@ -207,7 +207,7 @@ public class TiledMapPacker {
 		}
 
 		FileHandle tmxFile = new FileHandle(mapFile.getCanonicalPath());
-		writeUpdatedTMX(map, tmxFile);
+		writeUpdatedTMX(tmxFile);
 	}
 
 	private void stripUnusedTiles () {
@@ -311,7 +311,7 @@ public class TiledMapPacker {
 			int tileWidth = set.getProperties().get("tilewidth", Integer.class);
 			int tileHeight = set.getProperties().get("tileheight", Integer.class);
 			int firstgid = set.getProperties().get("firstgid", Integer.class);
-			String imageName = set.getProperties().get("imagesource", String.class);
+//			String imageName = set.getProperties().get("imagesource", String.class);
 
 			TileSetLayout layout = new TileSetLayout(firstgid, set, inputDirHandle);
 
@@ -355,7 +355,7 @@ public class TiledMapPacker {
 		new PixmapPackerIO().save(Gdx.files.absolute(tilesetOutputDir).child(this.settings.atlasOutputName + ".atlas"), packer, sp);
 	}
 
-	private void writeUpdatedTMX (TiledMap tiledMap, FileHandle tmxFileHandle) throws IOException {
+	private void writeUpdatedTMX (FileHandle tmxFileHandle) throws IOException {
 		Document doc;
 		DocumentBuilder docBuilder;
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -365,7 +365,7 @@ public class TiledMapPacker {
 			doc = docBuilder.parse(tmxFileHandle.read());
 
 			Node map = doc.getFirstChild();
-			while (map.getNodeType() != Node.ELEMENT_NODE || map.getNodeName() != "map") {
+			while (map.getNodeType() != Node.ELEMENT_NODE || !map.getNodeName().equals("map")) {
 				if ((map = map.getNextSibling()) == null) {
 					throw new GdxRuntimeException("Couldn't find map node!");
 				}
@@ -576,7 +576,8 @@ public class TiledMapPacker {
 		public String atlasOutputName = AtlasOutputName;
 	}
 
-	/** @author Nathan Sweet */
+	/** From TexturePacker.
+	 *  @author Nathan Sweet */
 	static public class Settings {
 		public boolean pot = true;
 		public boolean multipleOfFour;
@@ -667,19 +668,5 @@ public class TiledMapPacker {
 			legacyOutput = settings.legacyOutput;
 		}
 
-		public String getScaledPackFileName (String packFileName, int scaleIndex) {
-			// Use suffix if not empty string.
-			if (scaleSuffix[scaleIndex].length() > 0)
-				packFileName += scaleSuffix[scaleIndex];
-			else {
-				// Otherwise if scale != 1 or multiple scales, use subdirectory.
-				float scaleValue = scale[scaleIndex];
-				if (scale.length != 1) {
-					packFileName = (scaleValue == (int)scaleValue ? Integer.toString((int)scaleValue) : Float.toString(scaleValue))
-							+ "/" + packFileName;
-				}
-			}
-			return packFileName;
-		}
 	}
 }
