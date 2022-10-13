@@ -10,13 +10,9 @@ Given one or more TMX tilemaps, packs all tileset resources used across the maps
 single, or multiple (one per map), `TextureAtlas` and produces a new TMX file to be loaded with an `AtlasTiledMapLoader`
 loader. Optionally, it can keep track of unused tiles and omit them from the generated atlas, reducing the resource size.
 
-**Usage (non-MacOS)**:
+**Usage (all desktop platforms)**:
 
-`java -jar TiledMapPacker-1.11.0.0.jar inputDir [outputDir] [--strip-unused] [--combine-tilesets] [-v]`
-
-**Usage (MacOS, including M1)**:
-
-`java =XstartOnFirstThread -jar TiledMapPacker-1.11.0.0.jar inputDir [outputDir] [--strip-unused] [--combine-tilesets] [-v]`
+`java -jar TiledMapPacker-1.11.0.1.jar inputDir [outputDir] [--strip-unused] [--combine-tilesets] [-v]`
 
 The inputDir should contain a .tmx file and any tilesets it uses, placed how the .tmx map specifies them. The outputDir,
 if not specified, will be the folder `output/` next to the inputDir. If `--strip-unused` is present, then tiles that
@@ -32,3 +28,10 @@ correctly read the associated `TextureAtlas` representing the tileset.
 
 This was taken from inside [libGDX](https://github.com/libgdx/libgdx) and moved so it can be run more easily from
 outside that framework. It still has the same license as libGDX.
+
+# Changelog
+
+1.11.0.1 : Small release to minimize the JAR with ProGuard and to use `gdx-lwjgl3-glfw-awt-macos` to make running this
+easier on MacOS.
+
+1.11.0.0 : Initial release; this included the port to use PixmapPacker and LWJGL3 instead of TexturePacker and LWJGL2.

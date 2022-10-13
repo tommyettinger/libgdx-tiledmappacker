@@ -13,6 +13,7 @@ dependencies {
 		exclude group: "org.jcraft", module: "jorbis"
 		exclude group: "org.lwjgl", module: "lwjgl-openal"
 	}
+	implementation "com.badlogicgames.gdx:gdx-lwjgl3-glfw-awt-macos:$gdxVersion"
 	implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 }
 
