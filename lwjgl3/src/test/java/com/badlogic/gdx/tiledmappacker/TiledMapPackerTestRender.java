@@ -41,7 +41,7 @@ public class TiledMapPackerTestRender extends ApplicationAdapter {
 	// MAP_PATH = "../../tests/gdx-tests-android/assets/data/maps/tiled-atlas-processed/deleteMe/";
 
 	private final boolean DELETE_DELETEME_FOLDER_ON_EXIT = false; // read warning before setting to true
-	private final static String MAP_PATH = "headless/src/test/resources/maps//tiled-atlas-processed/deleteMe/";
+	private final static String MAP_PATH = "lwjgl3/src/test/resources/maps//tiled-atlas-processed/deleteMe/";
 
 	private final String MAP_NAME = "test.tmx";
 	private final String TMX_LOC = MAP_PATH + MAP_NAME;

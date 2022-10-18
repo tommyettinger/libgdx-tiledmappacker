@@ -16,6 +16,8 @@
 
 package com.badlogic.gdx.tiledmappacker;
 
+import com.badlogic.gdx.math.MathUtils;
+
 import java.io.File;
 
 /** Processes the maps located in gdx-tests-android: "assets/data/maps/tiled-atlas-src" Creates the directory
@@ -29,7 +31,7 @@ public class TiledMapPackerTest {
 	}
 
 	public static void main (String[] args) throws Exception {
-		String path = "headless/src/test/resources/maps/";
+		String path = "lwjgl3/src/test/resources/maps/";
 		String input = path + "tiled-atlas-src";
 		String output = path + "tiled-atlas-processed/deleteMe";
 		String verboseOpt = "-v";

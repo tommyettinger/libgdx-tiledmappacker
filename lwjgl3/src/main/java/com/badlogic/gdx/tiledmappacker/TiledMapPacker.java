@@ -30,6 +30,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import com.badlogic.gdx.backends.lwjgl3.*;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.PixmapPacker;
@@ -44,8 +45,6 @@ import org.xml.sax.SAXException;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.loaders.resolvers.AbsoluteFileHandleResolver;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapLayer;
@@ -468,7 +467,7 @@ public class TiledMapPacker {
 
 		if (args.length == 0) {
 			printUsage();
-			System.exit(0);
+			return;
 		} else if (args.length == 1) {
 			inputDir = new File(args[0]);
 			outputDir = new File(inputDir, "../output/");
@@ -478,13 +477,21 @@ public class TiledMapPacker {
 		} else {
 			inputDir = new File(args[0]);
 			outputDir = new File(args[1]);
-			processExtraArgs(args, packerSettings);
+			if(processExtraArgs(args, packerSettings)) return;
 		}
 
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setWindowedMode(100, 50);
 		config.setTitle("TiledMapPacker");
 		config.disableAudio(true);
+		final Lwjgl3Window[] win = new Lwjgl3Window[1];
+		config.setWindowListener(new Lwjgl3WindowAdapter(){
+			@Override
+			public void created(Lwjgl3Window window) {
+				super.created(window);
+				win[0] = window;
+			}
+		});
 		new Lwjgl3Application(new ApplicationListener() {
 
 			@Override
@@ -522,12 +529,18 @@ public class TiledMapPacker {
 					throw new RuntimeException("Error processing map: " + e.getMessage());
 				}
 				System.out.println("Finished processing.");
-				Gdx.app.exit();
+				if(win[0] != null) win[0].closeWindow();
 			}
 		}, config);
 	}
 
-	private static void processExtraArgs (String[] args, TiledMapPackerSettings packerSettings) {
+	/**
+	 *
+	 * @param args
+	 * @param packerSettings
+	 * @return returns true if this should terminate the program, or false if it should keep going
+	 */
+	private static boolean processExtraArgs (String[] args, TiledMapPackerSettings packerSettings) {
 		String stripUnused = "--strip-unused";
 		String combineTilesets = "--combine-tilesets";
 		String verbose = "-v";
@@ -549,9 +562,10 @@ public class TiledMapPacker {
 			} else {
 				System.out.println("\nOption \"" + string + "\" not recognized.\n");
 				printUsage();
-				System.exit(0);
+				return true;
 			}
 		}
+		return false;
 	}
 
 	private static void printUsage () {
