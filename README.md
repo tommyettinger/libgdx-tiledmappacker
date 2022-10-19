@@ -12,12 +12,12 @@ loader. Optionally, it can keep track of unused tiles and omit them from the gen
 
 **Usage (all desktop platforms)**:
 
-`java -jar TiledMapPacker-1.11.0.1.jar inputDir [outputDir] [--strip-unused] [--combine-tilesets] [-v]`
+`java -jar TiledMapPacker-1.11.0.2.jar inputDir [outputDir] [--strip-unused] [--combine-tilesets] [-v]`
 
 The inputDir should contain a .tmx file and any tilesets it uses, placed how the .tmx map specifies them. The outputDir,
 if not specified, will be the folder `output/` next to the inputDir. If `--strip-unused` is present, then tiles that
 aren't in the .tmx map will not be present in the resulting atlas. if `--combine-tilesets` is present, all tilesets will
-be merged into "some kind of monster" tileset; this is not currently recommended unless you know what you are doing. If
+be merged into "some kind of monster tileset;" this is not currently recommended unless you know what you are doing. If
 `-v` is present, this uses verbose mode, and will print much more output about everything it does.
 
 The original TMX map file will be parsed by using the `TmxMapLoader` loader, thus access to a valid OpenGL context is
@@ -26,12 +26,19 @@ The original TMX map file will be parsed by using the `TmxMapLoader` loader, thu
 The new TMX map file will contain a new property, "atlas", whose value will enable the `AtlasTiledMapLoader` to
 correctly read the associated `TextureAtlas` representing the tileset.
 
+This can be depended on and launched from code in an LWJGL3 project, typically calling the `TiledMapPacker.main()`
+method or the `processInputDir()` method on a new `TiledMapPacker` object. This creates a new window, but thanks to
+LWJGL3's features, it won't supersede any existing window, and should close on its own after packing completes.
+
 This was taken from inside [libGDX](https://github.com/libgdx/libgdx) and moved so it can be run more easily from
 outside that framework. It still has the same license as libGDX.
 
 # Changelog
 
+1.11.0.2 : Support usage where the tool is launched from code, by not forcibly exiting the application when packing
+completes (just the window is closed).
+
 1.11.0.1 : Small release to minimize the JAR with ProGuard and to use `gdx-lwjgl3-glfw-awt-macos` to make running this
-easier on MacOS.
+easier on macOS.
 
 1.11.0.0 : Initial release; this included the port to use PixmapPacker and LWJGL3 instead of TexturePacker and LWJGL2.

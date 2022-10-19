@@ -25,7 +25,7 @@ configure(subprojects) {
 }
 
 subprojects {
-	version = '1.11.0.2-SNAPSHOT'
+	version = '1.11.0.2'
 	ext.appName = 'libgdx-tiledmappacker'
 	repositories {
 		mavenLocal()
