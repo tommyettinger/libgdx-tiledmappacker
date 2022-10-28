@@ -10,10 +10,10 @@ sourceSets.main.resources.srcDirs = [file('../assets').path]
 dependencies {
 	implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
 	implementation ("com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"){
+		// exclude audio
 		exclude group: "org.jcraft", module: "jorbis"
 		exclude group: "org.lwjgl", module: "lwjgl-openal"
 	}
-	implementation "com.badlogicgames.gdx:gdx-lwjgl3-glfw-awt-macos:$gdxVersion"
 	implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 }
 
@@ -45,9 +45,11 @@ task proguard(type: ProGuardTask) {
 		libraryjars "${System.getProperty('java.home')}/jmods/java.base.jmod", jarfilter: '!**.jar', filter: '!module-info.class'
 	}
 //	injars jar.archiveFile
-	injars file("build/libs/${appName}.jar")
-//	var allJars = configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+
+//	var allJars = (configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) })
 //	allJars.add(file("build/libs/${appName}.jar"))
+//	injars allJars
+	injars (file("build/libs/${appName}.jar"))
 //	// we need to remove a Java 19-related file from LWJGL 3.3.1; ProGuard can't handle it.
 //	injars filter: "!Test.class", allJars
 	outjars "build/libs/${appName}-${version}.jar"

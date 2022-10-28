@@ -35,6 +35,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.PixmapPacker;
 import com.badlogic.gdx.graphics.g2d.PixmapPackerIO;
+import com.badlogic.gdx.utils.SharedLibraryLoader;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -454,6 +455,11 @@ public class TiledMapPacker {
 	 * @param args args[0]: the input directory containing the tmx files (and tile sets, relative to the path listed in the tmx
 	 *           file). args[1]: The output directory for the tmx files, should be empty before running. args[2-4] options */
 	public static void main (String[] args) {
+		// Allows the application to be run on macOS without needing the pesky -XstartOnFirstThread argument.
+		if (SharedLibraryLoader.isMac) {
+			org.lwjgl.system.Configuration.GLFW_LIBRARY_NAME.set("glfw_async");
+		}
+
 		final Settings texturePackerSettings = new Settings();
 		texturePackerSettings.paddingX = 2;
 		texturePackerSettings.paddingY = 2;
