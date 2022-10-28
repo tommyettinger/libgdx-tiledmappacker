@@ -8,16 +8,18 @@ buildscript {
 	}
 	dependencies {
 		classpath 'com.guardsquare:proguard-gradle:7.3.0-beta2'
+		classpath 'com.vanniktech:gradle-maven-publish-plugin:0.22.0'
 	}
 }
 
 allprojects {
 	apply plugin: 'eclipse'
 	apply plugin: 'idea'
+	apply plugin: 'java-library'
+	apply plugin: 'com.vanniktech.maven.publish'
 }
 
 configure(subprojects) {
-	apply plugin: 'java-library'
 	sourceCompatibility = 1.8
 	compileJava {
 		options.incremental = true
@@ -25,7 +27,7 @@ configure(subprojects) {
 }
 
 subprojects {
-	version = '1.11.0.3-SNAPSHOT'
+	version = "$VERSION_NAME"
 	ext.appName = 'libgdx-tiledmappacker'
 	repositories {
 		mavenLocal()

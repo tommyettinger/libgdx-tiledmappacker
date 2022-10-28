@@ -31,7 +31,7 @@ method or the `processInputDir()` method on a new `TiledMapPacker` object. This 
 LWJGL3's features, it won't supersede any existing window, and should close on its own after packing completes.
 
 This was taken from inside [libGDX](https://github.com/libgdx/libgdx) and moved so it can be run more easily from
-outside that framework. It still has the same license as libGDX.
+outside that framework. It still has the same license as libGDX, Apache 2.0 .
 
 # Changelog
 
