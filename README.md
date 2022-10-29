@@ -12,7 +12,7 @@ loader. Optionally, it can keep track of unused tiles and omit them from the gen
 
 **Usage (all desktop platforms)**:
 
-`java -jar TiledMapPacker-1.11.0.2.jar inputDir [outputDir] [--strip-unused] [--combine-tilesets] [-v]`
+`java -jar libgdx-tiledmappacker-runnable-1.11.0.4.jar inputDir [outputDir] [--strip-unused] [--combine-tilesets] [-v]`
 
 The inputDir should contain a .tmx file and any tilesets it uses, placed how the .tmx map specifies them. The outputDir,
 if not specified, will be the folder `output/` next to the inputDir. If `--strip-unused` is present, then tiles that
@@ -30,10 +30,33 @@ This can be depended on and launched from code in an LWJGL3 project, typically c
 method or the `processInputDir()` method on a new `TiledMapPacker` object. This creates a new window, but thanks to
 LWJGL3's features, it won't supersede any existing window, and should close on its own after packing completes.
 
+You can depend on this using Gradle, Maven, or other project-handling tools.
+
+If you use Gradle (more likely):
+
+`implementation 'com.github.tommyettinger:libgdx-tiledmappacker:1.11.0.4'`
+
+If you instead use Maven (unlikely unless you specifically chose it):
+```
+<dependency>
+  <groupId>com.github.tommyettinger</groupId>
+  <artifactId>libgdx-tiledmappacker</artifactId>
+  <version>1.11.0.4</version>
+  <type>module</type>
+</dependency>
+```
+(I don't actually know if it needs `<type>module</type>`; you can try without it.)
+
 This was taken from inside [libGDX](https://github.com/libgdx/libgdx) and moved so it can be run more easily from
 outside that framework. It still has the same license as libGDX, Apache 2.0 .
 
 # Changelog
+
+1.11.0.4: This is the first complete release published to Maven Central, so you can depend on it as a library if needed.
+This also switches away from `gdx-lwjgl3-glfw-awt-macos` and just uses `glfw_async`, which is a part of recent LWJGL3,
+because the former has some odd bugs with window resizing and movement. It still doesn't need `-XstartOnFirstThread` !
+
+1.11.0.3: Whoops. See 1.11.0.4, released just after this.
 
 1.11.0.2 : Support usage where the tool is launched from code, by not forcibly exiting the application when packing
 completes (just the window is closed).
