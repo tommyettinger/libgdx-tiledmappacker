@@ -52,7 +52,7 @@ task proguard(type: ProGuardTask) {
 	injars (file("build/libs/${appName}.jar"))
 //	// we need to remove a Java 19-related file from LWJGL 3.3.1; ProGuard can't handle it.
 //	injars filter: "!Test.class", allJars
-	outjars "build/libs/${appName}-${version}.jar"
+	outjars "build/libs/${appName}-runnable-${version}.jar"
 }
 
 proguard.dependsOn jar
