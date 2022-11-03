@@ -11,20 +11,25 @@ buildscript {
 		classpath 'com.vanniktech:gradle-maven-publish-plugin:0.22.0'
 	}
 }
+apply plugin: 'java-library'
+apply plugin: 'com.vanniktech.maven.publish'
 
 allprojects {
 	apply plugin: 'eclipse'
 	apply plugin: 'idea'
-	apply plugin: 'java-library'
-	apply plugin: 'com.vanniktech.maven.publish'
 }
 
 configure(subprojects) {
+	apply plugin: 'java-library'
+	apply plugin: 'com.vanniktech.maven.publish'
+
 	sourceCompatibility = 1.8
 	compileJava {
 		options.incremental = true
 	}
 }
+
+[compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 
 subprojects {
 	version = "$VERSION_NAME"
