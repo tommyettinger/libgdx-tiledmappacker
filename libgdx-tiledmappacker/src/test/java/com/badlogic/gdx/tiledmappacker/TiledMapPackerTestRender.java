@@ -103,7 +103,8 @@ public class TiledMapPackerTestRender extends ApplicationAdapter {
 		map.dispose();
 	}
 
-	public static void main (String[] args) throws Exception {
+	public static void main (String[] args) {
+		if (StartOnFirstThreadHelper.startNewJvmIfRequired()) return; // don't execute any code
 		File file = new File(MAP_PATH);
 		if (!file.exists()) {
 			System.out.println("Please run TiledMapPackerTest.");

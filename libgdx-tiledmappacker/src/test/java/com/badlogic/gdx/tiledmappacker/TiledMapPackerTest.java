@@ -16,8 +16,6 @@
 
 package com.badlogic.gdx.tiledmappacker;
 
-import com.badlogic.gdx.math.MathUtils;
-
 import java.io.File;
 
 /** Processes the maps located in gdx-tests-android: "assets/data/maps/tiled-atlas-src" Creates the directory

@@ -48,7 +48,8 @@ If you instead use Maven (unlikely unless you specifically chose it):
 (I don't actually know if it needs `<type>module</type>`; you can try without it.)
 
 This was taken from inside [libGDX](https://github.com/libgdx/libgdx) and moved so it can be run more easily from
-outside that framework. It still has the same license as libGDX, Apache 2.0 .
+outside that framework. It still has the same license as libGDX, Apache 2.0 . The `StartOnFirstThreadHelper` class is by
+damios, from the [guacamole](https://github.com/crykn/guacamole) library, also Apache 2.0 .
 
 # Changelog
 
