@@ -15,14 +15,13 @@
 
 package com.badlogic.gdx.tiledmappacker;
 
+import org.lwjgl.system.macosx.LibC;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
-
-import com.badlogic.gdx.utils.SharedLibraryLoader;
-import org.lwjgl.system.macosx.LibC;
 
 /**
  * Adds some utilities to ensure that the JVM was started with the
@@ -30,10 +29,7 @@ import org.lwjgl.system.macosx.LibC;
  * to function.
  * 
  * @author damios
- * @see <a href=
- *      "http://www.java-gaming.org/topics/starting-jvm-on-mac-with-xstartonfirstthread-programmatically/37697/view.html">Based
- *      on http://www.java-gaming.org/topics/-/37697/view.html</a>
- *
+ * @see <a href="https://jvm-gaming.org/t/starting-jvm-on-mac-with-xstartonfirstthread-programmatically/57547">Based on this java-gaming.org post by kappa</a>
  */
 public class StartOnFirstThreadHelper {
 
@@ -67,7 +63,7 @@ public class StartOnFirstThreadHelper {
 	 *         in this one
 	 */
 	public static boolean startNewJvmIfRequired(boolean redirectOutput) {
-		if (!SharedLibraryLoader.isMac) {
+		if (!System.getProperty("os.name").toLowerCase().contains("mac")) {
 			return false;
 		}
 
@@ -105,7 +101,7 @@ public class StartOnFirstThreadHelper {
 		jvmArgs.add(System.getProperty("java.class.path"));
 		String mainClass = System.getenv("JAVA_MAIN_CLASS_" + pid);
 		if (mainClass == null) {
-			StackTraceElement trace[] = Thread.currentThread().getStackTrace();
+			StackTraceElement[] trace = Thread.currentThread().getStackTrace();
 			if (trace.length > 0) {
 				mainClass = trace[trace.length - 1].getClassName();
 			} else {
@@ -175,7 +171,7 @@ public class StartOnFirstThreadHelper {
 	 * }
 	 * </pre>
 	 * 
-	 * @param mainMethodCode
+	 * @param mainMethodCode a Runnable or lambda containing the main method to run
 	 */
 	public static void executeIfJVMValid(Runnable mainMethodCode) {
 		if (startNewJvmIfRequired()) {
