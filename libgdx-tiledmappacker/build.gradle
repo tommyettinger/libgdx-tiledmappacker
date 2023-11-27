@@ -11,19 +11,19 @@ apply plugin: 'application'
 
 import proguard.gradle.ProGuardTask
 
-sourceCompatibility = 17
+java.sourceCompatibility = 17
+java.targetCompatibility = 17
 mainClassName = 'com.badlogic.gdx.tiledmappacker.TiledMapPacker'
 eclipse.project.name = appName + '-lwjgl3'
 sourceSets.main.resources.srcDirs += [file('../assets').path]
 
 dependencies {
 	implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
-	implementation ("com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion")
-//			{
-//		// exclude audio
-//		exclude group: "org.jcraft", module: "jorbis"
-//		exclude group: "org.lwjgl", module: "lwjgl-openal"
-//	}
+	implementation ("com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion") {
+		// exclude audio
+		exclude group: "org.jcraft", module: "jorbis"
+		exclude group: "org.lwjgl", module: "lwjgl-openal"
+	}
 	implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 }
 
