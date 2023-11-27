@@ -1,0 +1,28 @@
+project(":libgdx-tiledmappacker") {
+  apply plugin: "org.graalvm.buildtools.native"
+
+  dependencies {
+    implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
+    implementation "io.github.berstanio:gdx-svmhelper-backend-lwjgl3:$graalHelperVersion"
+  }
+
+  graalvmNative {
+    binaries {
+      main {
+        imageName = "$appName-$version"
+        mainClass = project.mainClassName
+        requiredVersion = '23.0'
+        buildArgs.add("-march=compatibility")
+        jvmArgs.addAll("-Dfile.encoding=UTF8")
+        sharedLibrary = false
+      }
+    }
+  }
+
+  run {
+    doNotTrackState("Running the app should not be affected by Graal.")
+  }
+
+  nativeCompile.dependsOn proguard
+}
+

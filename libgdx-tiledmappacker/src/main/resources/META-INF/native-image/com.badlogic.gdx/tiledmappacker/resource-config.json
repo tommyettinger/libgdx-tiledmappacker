@@ -1,0 +1,9 @@
+{
+  "resources":{
+  "includes":[
+    {
+      "pattern": ".+\\.(png|jpg|jpeg|atlas|pack|tmx|tsx|fnt|ttf|otf|json|xml|glsl)"
+    }
+  ]},
+  "bundles":[]
+}
