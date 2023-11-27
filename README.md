@@ -12,7 +12,14 @@ loader. Optionally, it can keep track of unused tiles and omit them from the gen
 
 **Usage (all desktop platforms)**:
 
-`java -jar libgdx-tiledmappacker-runnable-1.11.0.4.jar inputDir [outputDir] [--strip-unused] [--combine-tilesets] [-v]`
+`java -jar libgdx-tiledmappacker-runnable-1.12.1.0.jar inputDir [outputDir] [--strip-unused] [--combine-tilesets] [-v]`
+
+**Usage (Windows x64, alternative option)**:
+
+`libgdx-tiledmappacker-runnable-1.12.1.0.exe inputDir [outputDir] [--strip-unused] [--combine-tilesets] [-v]`
+
+The first option works everywhere, but needs the `java` command available and referring to a Java 17 or higher
+installation. The alternative option doesn't need any JDK or JRE installed, but only works on Windows x64 OSes.
 
 The inputDir should contain a .tmx file and any tilesets it uses, placed how the .tmx map specifies them. The outputDir,
 if not specified, will be the folder `output/` next to the inputDir. If `--strip-unused` is present, then tiles that
@@ -34,14 +41,14 @@ You can depend on this using Gradle, Maven, or other project-handling tools.
 
 If you use Gradle (more likely):
 
-`implementation 'com.github.tommyettinger:libgdx-tiledmappacker:1.11.0.4'`
+`implementation 'com.github.tommyettinger:libgdx-tiledmappacker:1.12.1.0'`
 
 If you instead use Maven (unlikely unless you specifically chose it):
 ```
 <dependency>
   <groupId>com.github.tommyettinger</groupId>
   <artifactId>libgdx-tiledmappacker</artifactId>
-  <version>1.11.0.4</version>
+  <version>1.12.1.0</version>
   <type>module</type>
 </dependency>
 ```
@@ -52,6 +59,10 @@ outside that framework. It still has the same license as libGDX, Apache 2.0 . Th
 damios, from the [guacamole](https://github.com/crykn/guacamole) library, also Apache 2.0 .
 
 # Changelog
+
+1.12.1.0: This uses libGDX 1.12.1, switches away from the weird and buggy ways to avoid `-XstartOnFirstThread`, and uses
+the now-sort-of-standard `StartupHelper` class to start the JVM with the `-XstartOnFirstThread` argument on Macs. It
+also can build a native executable with Graal Native Image. A Windows native image is provided in the release.
 
 1.11.0.4: This is the first complete release published to Maven Central, so you can depend on it as a library if needed.
 This also switches away from `gdx-lwjgl3-glfw-awt-macos` and just uses `glfw_async`, which is a part of recent LWJGL3,

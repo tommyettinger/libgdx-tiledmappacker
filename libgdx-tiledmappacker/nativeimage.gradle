@@ -9,7 +9,7 @@ project(":libgdx-tiledmappacker") {
   graalvmNative {
     binaries {
       main {
-        imageName = "$appName-$version"
+        imageName = "$appName-runnable-$version"
         mainClass = project.mainClassName
         requiredVersion = '23.0'
         buildArgs.add("-march=compatibility")

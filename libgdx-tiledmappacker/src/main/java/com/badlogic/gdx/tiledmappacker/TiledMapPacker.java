@@ -447,7 +447,7 @@ public class TiledMapPacker {
 	 * @param args args[0]: the input directory containing the tmx files (and tile sets, relative to the path listed in the tmx
 	 *           file). args[1]: The output directory for the tmx files, should be empty before running. args[2-4] options */
 	public static void main (String[] args) {
-		if (StartOnFirstThreadHelper.startNewJvmIfRequired()) return; // don't execute any code
+		if (StartupHelper.startNewJvmIfRequired()) return; // This handles macOS support and helps on Windows.
 
 		final Settings texturePackerSettings = new Settings();
 		texturePackerSettings.paddingX = 2;
